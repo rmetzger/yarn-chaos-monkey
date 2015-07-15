@@ -14,6 +14,10 @@ mvn clean install
 
 Run it.
 ```
-java -cp target/yarn-chaos-monkey-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.yarnchaosmonkey.App
+# Make sure Hadoop can find its configs
+export HADOOP_CONF_DIR=/etc/hadoop/conf
+
+java -cp $HADOOP_CONF_DIR:target/yarn-chaos-monkey-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.yarnchaosmonkey.App --appId application_1436277217933_0204
+
 ```
 

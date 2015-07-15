@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface ContainerKiller {
 
-	void kill(ContainerReport container) throws IOException;
+	void kill(ContainerReport container) throws Exception;
 }
