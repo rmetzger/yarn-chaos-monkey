@@ -14,4 +14,6 @@ mvn clean install
 
 Run it.
 ```
+java -cp target/yarn-chaos-monkey-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.yarnchaosmonkey.App
 ```
+

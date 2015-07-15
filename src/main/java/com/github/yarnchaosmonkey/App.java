@@ -3,6 +3,7 @@ package com.github.yarnchaosmonkey;
 import com.github.yarnchaosmonkey.killer.ContainerKiller;
 import com.github.yarnchaosmonkey.killer.ExternalContainerKiller;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.yarn.api.records.ApplicationAttemptReport;
 import org.apache.hadoop.yarn.api.records.ApplicationId;
 import org.apache.hadoop.yarn.api.records.ContainerReport;
@@ -23,8 +24,13 @@ public class App  {
 		ContainerKiller killer = new ExternalContainerKiller(pt.get("scriptPath", "scripts/remoteKill.sh"));
 
 		YarnClient yc = YarnClient.createYarnClient();
+		yc.init(new Configuration());
+		yc.start();
 
 		ApplicationId appid = ConverterUtils.toApplicationId(pt.getRequired("appId"));
+		if(appid == null) {
+			throw new IllegalArgumentException("Can not parse appId: " + pt.getRequired("appId"));
+		}
 		List<ApplicationAttemptReport> attempts = yc.getApplicationAttempts(appid);
 
 		System.out.println("The application "+appid+" has the following attempts: "+attempts);
