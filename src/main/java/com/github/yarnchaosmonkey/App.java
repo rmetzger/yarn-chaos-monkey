@@ -53,7 +53,7 @@ public class App  {
 		}
 
 		long sleepTime = pt.getLong("sleepBetweenFailuresSec")*1000;
-		// enter the loop
+
 		while(true) {
 			List<ContainerReport> containers = yc.getContainers(runningAttempt.getApplicationAttemptId());
 			LOG.info("Identified " + containers.size() + " running containers of " + appid);
@@ -83,7 +83,7 @@ public class App  {
 				killer.kill(containerToKill);
 			}
 
-			LOG.info("Sleeping for "+(sleepTime/60)+" seconds");
+			LOG.info("Sleeping for "+(sleepTime/1000)+" seconds");
 			// wait for the next round
 			Thread.sleep(sleepTime);
 		}

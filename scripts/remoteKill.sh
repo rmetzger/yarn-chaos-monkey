@@ -6,11 +6,4 @@ HOST_SHORT=$3
 
 echo "Killing $CONTAINER_ID on host $HOST"
 
-PID=`ssh  $HOST_SHORT -- ps aux | grep $CONTAINER_ID | grep java | tr -s ' ' | cut -d ' ' -f 2 | head -n 1`
-
-echo "PID = $PID"
-ssh  $HOST_SHORT -- sudo kill $PID
-
-# OR
-# ssh -n $HOST_SHORT -- "sudo kill `ps aux | grep $CONTAINER_ID | grep java | tr -s ' ' | cut -d ' ' -f 2 | head -n 1`"
-
+yarn container -signal $CONTAINER_ID FORCEFUL_SHUTDOWN
