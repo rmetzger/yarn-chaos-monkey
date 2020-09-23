@@ -11,4 +11,6 @@ PID=`ssh  $HOST_SHORT -- ps aux | grep $CONTAINER_ID | grep java | tr -s ' ' | c
 echo "PID = $PID"
 ssh  $HOST_SHORT -- sudo kill $PID
 
+# OR
+# ssh -n $HOST_SHORT -- "sudo kill `ps aux | grep $CONTAINER_ID | grep java | tr -s ' ' | cut -d ' ' -f 2 | head -n 1`"
 
