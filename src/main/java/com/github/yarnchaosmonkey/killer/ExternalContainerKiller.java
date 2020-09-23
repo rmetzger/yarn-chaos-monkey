@@ -1,5 +1,7 @@
 package com.github.yarnchaosmonkey.killer;
 
+import org.apache.flink.util.Preconditions;
+
 import org.apache.hadoop.yarn.api.records.ContainerReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,8 @@ public class ExternalContainerKiller implements ContainerKiller {
 
 	@Override
 	public void kill(ContainerReport container) throws Exception {
+		Preconditions.checkNotNull(container);
+
 		Runtime rt = Runtime.getRuntime();
 		String host = container.getAssignedNode().getHost();
 		String command = cmd + " " + container.getContainerId() + " " + host + " " + getShortHost(host);

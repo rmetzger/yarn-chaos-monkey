@@ -79,7 +79,9 @@ public class App  {
 				}
 			}
 			// kill container
-			killer.kill(containerToKill);
+			if (containerToKill != null) {
+				killer.kill(containerToKill);
+			}
 
 			LOG.info("Sleeping for "+(sleepTime/60)+" seconds");
 			// wait for the next round
