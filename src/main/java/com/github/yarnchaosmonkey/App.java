@@ -19,6 +19,8 @@ import java.util.Random;
 public class App  {
 	private static final Logger LOG = LoggerFactory.getLogger(App.class);
 
+	private final static Random RNG = new Random(1337);
+
 	public static void main(String[] args) throws Exception {
 
 		ParameterTool pt = ParameterTool.fromArgs(args);
@@ -52,8 +54,6 @@ public class App  {
 
 		long sleepTime = pt.getLong("sleepBetweenFailuresSec")*1000;
 		// enter the loop
-		Random rnd = new Random(1337);
-
 		while(true) {
 			List<ContainerReport> containers = yc.getContainers(runningAttempt.getApplicationAttemptId());
 			LOG.info("Identified " + containers.size() + " running containers of " + appid);
@@ -61,15 +61,18 @@ public class App  {
 			// find a container to kill
 			ContainerReport containerToKill = null;
 			while(containerToKill == null) {
-				int idx = rnd.nextInt(containers.size() - 1);
-				containerToKill = containers.get(idx);
-				LOG.info("Selected " + containerToKill + " as container to kill");
-				if(!pt.has("killAM") && containerToKill.getContainerId().getContainerId() == runningAttempt.getAMContainerId().getContainerId()) {
-					LOG.info("Container to kill is AM. Looking for another container");
-					containerToKill = null;
-					if(containers.size() == 1) {
-						LOG.info("Stopping tool. There is only one container (the AM) and I'm not allowed to kill the AM");
-						return;
+				int containerCount = containers.size();
+				if (containerCount > 1) {
+					int idx = RNG.nextInt(containerCount - 1);
+					containerToKill = containers.get(idx);
+					LOG.info("Selected " + containerToKill + " as container to kill");
+					if (!pt.has("killAM") && containerToKill.getContainerId().getContainerId() == runningAttempt.getAMContainerId().getContainerId()) {
+						LOG.info("Container to kill is AM. Looking for another container");
+						containerToKill = null;
+						if (containers.size() == 1) {
+							LOG.info("Stopping tool. There is only one container (the AM) and I'm not allowed to kill the AM");
+							return;
+						}
 					}
 				}
 			}
