@@ -74,6 +74,8 @@ public class App  {
 							return;
 						}
 					}
+				} else {
+					break; // only 0 or 1 containers running.
 				}
 			}
 			// kill container
